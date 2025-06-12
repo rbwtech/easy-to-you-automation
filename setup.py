@@ -29,7 +29,7 @@ setup(
     name="easy-to-you-automation",
     version="2.0.0",
     author="RBW-Tech",
-    author_email="contact@triatech.net",
+    author_email="radipta111@gmail.com",
     description="Professional IonicCube decoder using easytoyou.eu with enhanced performance and reliability",
     long_description=long_description,
     long_description_content_type="text/markdown",
