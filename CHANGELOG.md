@@ -83,6 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Support for easytoyou.eu service** integration
 - **Directory walking** for recursive file processing
 - **Simple progress indication** during processing
+- **Fixed** browser compatibility and upload form detection
 
 ### 🔧 Features
 
