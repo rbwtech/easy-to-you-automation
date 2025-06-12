@@ -1,0 +1,23 @@
+# HTTP Client with security features
+requests>=2.31.0
+
+# HTML/XML Parser
+beautifulsoup4>=4.12.0
+
+# XML Parser (faster than html.parser)
+lxml>=4.9.3
+
+# CSS Selector library (auto-installed with beautifulsoup4)
+soupsieve>=2.5
+
+# Security certificates (auto-updated)
+certifi>=2023.7.22
+
+# Character encoding detection
+charset-normalizer>=3.3.0
+
+# URL handling
+idna>=3.4
+
+# HTTP connection pooling (auto-installed with requests)
+urllib3>=2.0.7

@@ -1,0 +1,102 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "easy-to-you-automation"
+version = "2.0.0"
+description = "Professional IonicCube decoder using easytoyou.eu with enhanced performance and reliability"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "RBW-Tech", email = "radipta111@gmail.com"},
+]
+maintainers = [
+    {name = "RBW-Tech", email = "radipta111@gmail.com"},
+]
+keywords = [
+    "ioncube", "decoder", "php", "encryption", "decryption", 
+    "easytoyou", "automation", "batch-processing"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Tools",
+    "Topic :: Security :: Cryptography",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "requests>=2.31.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=4.9.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/rbwtech/easy-to-you-automation"
+Documentation = "https://github.com/rbwtech/easy-to-you-automation/blob/main/README.md"
+Repository = "https://github.com/rbwtech/easy-to-you-automation.git"
+"Bug Tracker" = "https://github.com/rbwtech/easy-to-you-automation/issues"
+"Source Code" = "https://github.com/rbwtech/easy-to-you-automation"
+
+[project.scripts]
+easy-to-you = "easytoyou.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+easytoyou = ["py.typed"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --cov=easytoyou --cov-report=html --cov-report=term"
+testpaths = [
+    "tests",
+]
