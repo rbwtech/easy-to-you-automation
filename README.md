@@ -28,7 +28,7 @@ _Quickly and efficiently decrypt large PHP codebases using easytoyou.eu automati
 🔥 **High Performance**
 
 - **3x faster** than manual processing with intelligent batch uploads
-- **100% success rate** with automatic retry mechanisms
+- **95% success rate** with automatic retry mechanisms
 - Memory-optimized for large directories (1000+ files)
 - Smart queue management and session persistence
 
