@@ -261,7 +261,7 @@ python scripts/main.py -u username -p password -s ./large_directory -v
 - 📚 **Detailed Documentation**: Check the [docs/](docs/) folder
 - 🐛 **Bug Reports**: [GitHub Issues](https://github.com/rbwtech/easy-to-you-automation/issues)
 - 💬 **Questions & Discussions**: [GitHub Discussions](https://github.com/rbwtech/easy-to-you-automation/discussions)
-- 📧 **Direct Contact**: [RBW-Tech](mailto:contact@triatech.net)
+- 📧 **Direct Contact**: [RBW-Tech](mailto:radipta111@gmail.com)
 
 ## 🛠️ Advanced Usage
 
@@ -362,7 +362,7 @@ If this project helps you save time and effort:
 
 <div align="center">
 
-**Built with ❤️ by [RBW-Tech](https://triatech.net)**
+**Built with ❤️ by [RBW-Tech](https://rbwtech.io)**
 
 _Making IonicCube decoding effortless for developers worldwide_
 
