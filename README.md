@@ -42,7 +42,7 @@ _Quickly and efficiently decrypt large PHP codebases using easytoyou.eu automati
 📊 **Professional Monitoring**
 
 - **Real-time progress tracking** with percentage completion
-- Comprehensive logging (console + file output)
+- Detailed logging (console + file output)
 - Detailed success/failure reporting with actionable insights
 - Performance metrics and statistics
 
@@ -194,7 +194,7 @@ easy-to-you-automation/
 
 - **Performance**: 3x faster with batch processing
 - **Reliability**: 95% success rate with automatic retry
-- **Features**: Progress tracking, comprehensive logging, error recovery
+- **Features**: Progress tracking, detailed logging, error recovery
 - **Architecture**: Object-oriented, modular design
 - **Best for**: New projects, large directories, production use
 
