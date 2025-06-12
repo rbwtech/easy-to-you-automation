@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Real-time progress tracking** with detailed logging and percentage completion
 - **Automatic retry mechanism** with exponential backoff for failed requests
 - **Session management** with connection pooling and persistent HTTP connections
-- **Comprehensive error handling** with custom exception hierarchy
+- **Detailed error handling** with custom exception hierarchy
 - **Type hints** throughout the codebase for better maintainability
 - **Professional logging system** (console + file output)
 - **Modular package structure** in `src/easytoyou/` for easy maintenance
@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🛡️ Reliability Enhancements
 
-- **100% success rate improvement** through enhanced error handling
+- **95% success rate improvement** through enhanced error handling
 - **Graceful network error recovery** with automatic retry mechanisms
 - **Enhanced session management** preventing login failures and timeouts
 - **Rate limiting protection** with intelligent delays between requests
@@ -47,7 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🔧 Technical Improvements
 
-- Added comprehensive logging system with both console and file output
+- Added logging system with both console and file output
 - Implemented proper exception handling hierarchy with custom exceptions
 - Added extensive type hints and documentation throughout codebase
 - Modular code architecture with separation of concerns
