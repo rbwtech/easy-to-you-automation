@@ -1,4 +1,4 @@
-"""
+﻿"""
 Session management for EasyToYou decoder
 """
 
@@ -10,7 +10,7 @@ import time
 import logging
 from typing import Optional, Dict, Any
 
-from .exceptions import LoginError, NetworkError
+from exceptions import LoginError, NetworkError
 
 logger = logging.getLogger(__name__)
 
