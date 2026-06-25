@@ -27,7 +27,7 @@ except FileNotFoundError:
 
 setup(
     name="easy-to-you-automation",
-    version="2.0.0",
+    version="2.1.0",
     author="RBW-Tech",
     author_email="radipta111@gmail.com",
     description="Professional IonicCube decoder using easytoyou.eu with enhanced performance and reliability",
@@ -72,7 +72,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "easy-to-you=easytoyou.cli:main",
+            "easy-to-you=decoder:main",
         ],
     },
     keywords=[

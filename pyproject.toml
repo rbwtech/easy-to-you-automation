@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "easy-to-you-automation"
-version = "2.0.0"
+version = "2.1.0"
 description = "Professional IonicCube decoder using easytoyou.eu with enhanced performance and reliability"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -37,6 +37,7 @@ dependencies = [
     "requests>=2.31.0",
     "beautifulsoup4>=4.12.0",
     "lxml>=4.9.3",
+    "rich>=13.7.0",
 ]
 
 [project.optional-dependencies]
@@ -56,13 +57,10 @@ Repository = "https://github.com/rbwtech/easy-to-you-automation.git"
 "Source Code" = "https://github.com/rbwtech/easy-to-you-automation"
 
 [project.scripts]
-easy-to-you = "easytoyou.cli:main"
+easy-to-you = "decoder:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.setuptools.package-data]
-easytoyou = ["py.typed"]
 
 [tool.black]
 line-length = 88
