@@ -47,7 +47,7 @@ class IonicubeDecoder:
         self,
         username: str,
         password: str,
-        decoder: str = "ic11php72",
+        decoder: str = "ic11php74",
         custom_watermark: Optional[str] = None,
         max_retries: int = 4,
     ):

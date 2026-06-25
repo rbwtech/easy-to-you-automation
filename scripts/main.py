@@ -45,7 +45,7 @@ Examples:
     parser.add_argument("-p", "--password", required=True, help="easytoyou.eu password")
     parser.add_argument("-s", "--source", required=True, help="source directory")
     parser.add_argument("-o", "--destination", help="output directory (default: source_decoded)")
-    parser.add_argument("-d", "--decoder", default="ic11php72", help="decoder version (default: ic11php72)")
+    parser.add_argument("-d", "--decoder", default="ic11php74", help="decoder version (default: ic11php74)")
     parser.add_argument("-w", "--overwrite", action="store_true", help="overwrite existing decoded files")
     parser.add_argument("-v", "--verbose", action="store_true", help="verbose logging")
     parser.add_argument("--watermark", help="custom watermark text")

@@ -34,7 +34,7 @@ Options:
 | `-p` | easytoyou.eu password | required |
 | `-s` | source directory | required |
 | `-o` | output directory | `{source}_decoded` |
-| `-d` | decoder version | `ic11php72` |
+| `-d` | decoder version | `ic11php74` |
 | `-w` | overwrite existing files | off |
 | `-v` | verbose logging | off |
 | `--retry N` | max retry attempts per batch | 4 |
@@ -60,8 +60,10 @@ print(f"Failed  : {len(decoder.not_decoded)}")
 | Value | PHP target |
 |-------|-----------|
 | `ic10php72` | PHP 7.2 (IonCube 10) |
-| `ic11php72` | PHP 7.2 (IonCube 11) -- default |
-| `ic11php73` | PHP 7.3+ |
+| `ic11php72` | PHP 7.2 (IonCube 11) |
+| `ic11php73` | PHP 7.3 (IonCube 11) |
+| `ic11php74` | PHP 7.4 (IonCube 11) -- default |
+| `ic11php80` | PHP 8.0 (IonCube 11) |
 
 Check [easytoyou.eu](https://easytoyou.eu) for the current list.
 
