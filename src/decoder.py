@@ -1,4 +1,5 @@
-﻿import os
+﻿import json
+import os
 import re
 import sys
 import shutil
@@ -67,6 +68,9 @@ class IonicubeDecoder:
         self.processed_count = 0
         self.total_files = 0
         self._lock = threading.Lock()
+        self.progress_file: str = ""
+        self._done_files: set = set()
+        self._source_root: str = ""
 
     def _retry(self, fn: Callable[[], T], delays: Optional[List[int]] = None) -> T:
         if delays is None:
@@ -276,10 +280,13 @@ class IonicubeDecoder:
             with zipfile.ZipFile(BytesIO(response.content)) as zf:
                 count = 0
                 for name in zf.namelist():
+                    filename = os.path.basename(name)
+                    if not filename:
+                        continue
                     data = zf.read(name)
-                    if name.lower().endswith(".php"):
+                    if filename.lower().endswith(".php"):
                         data = self._replace_watermark(data)
-                    dest_path = os.path.join(destination_dir, os.path.basename(name))
+                    dest_path = os.path.join(destination_dir, filename)
                     with open(dest_path, "wb") as f:
                         f.write(data)
                     count += 1
@@ -327,6 +334,15 @@ class IonicubeDecoder:
             self._retry(attempt_batch)
             with self._lock:
                 self.processed_count += len(batch)
+                for f in batch:
+                    rel = os.path.relpath(os.path.join(source_dir, f), self._source_root).replace("\\", "/")
+                    self._done_files.add(rel)
+                if self.progress_file:
+                    try:
+                        with open(self.progress_file, "w") as pf:
+                            json.dump({"done": list(self._done_files)}, pf)
+                    except Exception as e:
+                        logger.warning(f"Could not save progress: {e}")
             progress.advance(task_id, len(batch))
             return True
         except Exception as e:
@@ -357,12 +373,26 @@ class IonicubeDecoder:
 
     def decode_directory(self, source_path: str, dest_path: str, overwrite: bool = False) -> bool:
         logger.info(f"Starting decode: {source_path} -> {dest_path}")
+        self._source_root = source_path
 
         if not self.login():
             logger.error("Login failed")
             return False
 
         self.clear_decoder_queue()
+
+        # Resume support: load previously decoded file list
+        if not self.progress_file:
+            safe = re.sub(r"[^\w]", "_", os.path.basename(source_path.rstrip("/\\")))
+            self.progress_file = os.path.join(dest_path, f".decode_progress_{safe}.json")
+        if os.path.exists(self.progress_file):
+            try:
+                self._done_files = set(json.loads(open(self.progress_file).read()).get("done", []))
+                logger.info(f"Resuming: {len(self._done_files)} files already tracked")
+            except Exception:
+                self._done_files = set()
+        else:
+            self._done_files = set()
 
         total_ioncube = find_ioncube_files(source_path)
         self.total_files = len(total_ioncube)
@@ -380,7 +410,12 @@ class IonicubeDecoder:
                 filepath = os.path.join(root, filename)
                 if filename.endswith(".php") and is_ioncube_file(filepath):
                     dest_file = os.path.join(dest_dir, filename)
+                    rel_key = os.path.relpath(filepath, source_path).replace("\\", "/")
+                    if rel_key in self._done_files:
+                        continue
                     if not overwrite and os.path.exists(dest_file):
+                        with self._lock:
+                            self._done_files.add(rel_key)
                         continue
                     php_files.append(filename)
                 else:
