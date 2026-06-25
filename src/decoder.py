@@ -141,41 +141,41 @@ class IonicubeDecoder:
         return self.session_manager.login(self.username, self.password)
 
     def clear_decoder_queue(self) -> None:
+        # Page 1 always shows the first 10; after deleting, the next batch slides into page 1.
+        # Loop on page 1 until it's empty -- no need to paginate.
+        decoder_url = f"{self.base_url}/decoder/{self.decoder}"
         cleared = 0
-        for attempt in range(5):
+        consecutive_empty = 0
+
+        while True:
             try:
-                response = self.session_manager.get(
-                    f"{self.base_url}/decoder/{self.decoder}/1", timeout=30
-                )
-                if response.status_code == 404:
-                    break
+                response = self.session_manager.get(decoder_url, timeout=30)
                 response.raise_for_status()
 
                 soup = bs4.BeautifulSoup(response.content, "html.parser")
                 file_inputs = soup.find_all("input", attrs={"name": "file[]"})
 
                 if not file_inputs:
-                    break
+                    consecutive_empty += 1
+                    if consecutive_empty >= 2:
+                        break
+                    time.sleep(0.5)
+                    continue
 
-                delete_data = "&".join(
-                    urllib.parse.urlencode({inp["name"]: inp["value"]})
-                    for inp in file_inputs
-                    if inp.get("value")
+                consecutive_empty = 0
+                vals = [inp["value"] for inp in file_inputs if inp.get("value")]
+                self.session_manager.post(
+                    decoder_url,
+                    data={"file[]": vals, "submit": "Delete"},
+                    headers={"Referer": decoder_url},
+                    timeout=30,
                 )
-
-                if delete_data:
-                    self.session_manager.post(
-                        f"{self.base_url}/decoder/{self.decoder}/1",
-                        data=delete_data,
-                        headers={"Content-Type": "application/x-www-form-urlencoded"},
-                        timeout=30,
-                    )
-                    cleared += len(file_inputs)
-
-                time.sleep(0.5)
+                cleared += len(vals)
+                logger.debug(f"Queue clear: deleted {len(vals)} (total {cleared})")
+                time.sleep(0.3)
 
             except Exception as e:
-                logger.warning(f"Queue clear pass {attempt + 1}: {e}")
+                logger.warning(f"Queue clear error: {e}")
                 break
 
         if cleared:
@@ -265,7 +265,9 @@ class IonicubeDecoder:
             logger.error(f"Error parsing upload result: {e}")
             return [], []
 
-    def download_decoded_files(self, destination_dir: str) -> bool:
+    def download_decoded_files(
+        self, destination_dir: str, allowed_names: Optional[set] = None
+    ) -> bool:
         create_directory(destination_dir)
 
         def do_download() -> bool:
@@ -283,6 +285,9 @@ class IonicubeDecoder:
                     filename = os.path.basename(name)
                     if not filename:
                         continue
+                    # Only extract files that belong to this batch
+                    if allowed_names is not None and filename not in allowed_names:
+                        continue
                     data = zf.read(name)
                     if filename.lower().endswith(".php"):
                         data = self._replace_watermark(data)
@@ -290,7 +295,7 @@ class IonicubeDecoder:
                     with open(dest_path, "wb") as f:
                         f.write(data)
                     count += 1
-                logger.info(f"Extracted {count} files")
+                logger.info(f"Extracted {count}/{len(allowed_names) if allowed_names else '?'} files")
             return True
 
         try:
@@ -322,10 +327,14 @@ class IonicubeDecoder:
         progress: Progress,
         task_id,
     ) -> bool:
+        batch_names = set(batch)
+
         def attempt_batch() -> None:
+            # Clear any stale files from previous batches/runs before uploading
+            self.clear_decoder_queue()
             success, failure = self.upload_files(source_dir, batch)
             if success:
-                self.download_decoded_files(dest_dir)
+                self.download_decoded_files(dest_dir, allowed_names=batch_names)
             if failure:
                 with self._lock:
                     self.not_decoded.extend([os.path.join(source_dir, f) for f in failure])
@@ -351,8 +360,6 @@ class IonicubeDecoder:
                 self.not_decoded.extend([os.path.join(source_dir, f) for f in batch])
             progress.advance(task_id, len(batch))
             return False
-        finally:
-            self.clear_decoder_queue()
 
     def process_directory_batch(
         self,
@@ -378,8 +385,6 @@ class IonicubeDecoder:
         if not self.login():
             logger.error("Login failed")
             return False
-
-        self.clear_decoder_queue()
 
         # Resume support: load previously decoded file list
         if not self.progress_file:
